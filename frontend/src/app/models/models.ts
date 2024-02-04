@@ -1,4 +1,5 @@
 import e from "express";
+import { RegisterDTO } from "./DTOs";
 
 interface IUser{
     id: number | undefined;
@@ -45,6 +46,36 @@ export class LoginResponse implements ILoginResponse{
             this.email = data.email;
             this.role = data.role;
             this.id = data.id;
+        }
+    }
+}
+
+interface IPost{
+    id: number | undefined;
+    description: string | undefined;
+    userId: number | undefined;
+    url: string | undefined;
+    user: RegisterDTO | undefined;
+    date: Date | undefined;
+    // comments: Comment[] | undefined;
+}
+
+export class Post implements IPost{
+    id: number | undefined;
+    description: string | undefined;
+    userId: number | undefined;
+    url: string | undefined;
+    user: RegisterDTO | undefined;
+    date: Date | undefined;
+
+    constructor(data: IPost){
+        if(data){
+            this.id = data.id;
+            this.description = data.description;
+            this.userId = data.userId;
+            this.url = data.url;
+            this.user = data.user;
+            this.date = data.date;
         }
     }
 }

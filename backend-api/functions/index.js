@@ -76,9 +76,26 @@ app.put("/api/login", (req, res) => {
   })();
 });
 
-//  update
+// get by id
+app.get("/api/user", (req, res) => {
+  (async () => {
+    try {
+      
+      let user = db.collection("user").doc(req.id);
+      if (!post) {
+        return res.status(404).send("User not found");
+      }
+      return res.status(200).send(user);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  })();
+});
 
-// delete
+
+// get all
+
 
 // exports the api
 exports.app = functions.https.onRequest(app);

@@ -4,17 +4,19 @@ import { LoginResponse } from '../models/models';
 @Injectable({
   providedIn: 'root',
 })
-
 export class DataReciverService {
   constructor() {}
 
   setUserData(User: LoginResponse) {
-    sessionStorage.setItem('user', JSON.stringify(User));
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('user', JSON.stringify(User));
+    }
   }
 
   getUserData(): LoginResponse | undefined {
-    return JSON.parse(sessionStorage.getItem('user')!) ?? undefined;
+    if (typeof sessionStorage !== 'undefined') {
+      return JSON.parse(sessionStorage.getItem('user')!) ?? undefined;
+    }
+    return undefined;
   }
-
-  
 }
