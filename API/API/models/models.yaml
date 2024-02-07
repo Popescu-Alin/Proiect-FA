@@ -1,0 +1,299 @@
+openapi: 3.1.0
+info:
+  version: '1.0'
+  title: licenta
+  summary: api used for licenta
+  contact:
+    name: ''
+  description: 'description: Api to use for licenta'
+servers:
+  - url: 'https://localhost:3000/api/Base'
+paths:
+  /posts/get:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+                  x-stoplight:
+                    id: 1albm8btkr8wy
+      operationId: get-posts
+  /login:
+    put:
+      summary: ''
+      operationId: login
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDTO'
+  '/users/get/{id}':
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      operationId: get-user-by-id
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  /posts:
+    post:
+      summary: ''
+      operationId: add-post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+  /register:
+    post:
+      summary: ''
+      operationId: register-user
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEntityResponse'
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationDTO'
+  /users/profile:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      operationId: profile
+components:
+  schemas:
+    Post:
+      title: Post
+      x-stoplight:
+        id: w0iys9t3ganp2
+      type: object
+      additionalProperties: false
+      examples: []
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+          x-stoplight:
+            id: 7kcsw2bbp99z5
+        url:
+          type: string
+          x-stoplight:
+            id: hbuaovubbs0ld
+        comments:
+          x-stoplight:
+            id: 4s7txmjhgu8tg
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+            x-stoplight:
+              id: 0kpnvuuyt05tz
+        userId:
+          type: string
+          x-stoplight:
+            id: 3ygrhx9z2valt
+        date:
+          type: string
+          x-stoplight:
+            id: omvvzfnztyp9j
+          format: date-time
+    UserLoginDTO:
+      title: UserLoginDTO
+      x-stoplight:
+        id: bqy9nefss8c80
+      type: object
+      examples:
+        - email: string
+          password: string
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+          x-stoplight:
+            id: 5grqa4kalii7j
+        password:
+          type: string
+          x-stoplight:
+            id: 7vrqmqsy5c3bi
+    TokenResponse:
+      title: TokenResponse
+      x-stoplight:
+        id: xvlg40tqeugp1
+      type: object
+      additionalProperties: false
+      properties:
+        token:
+          type: string
+          x-stoplight:
+            id: 9csglrwnfi0t3
+    RegistrationDTO:
+      title: RegistrationDTO
+      x-stoplight:
+        id: v951ld8w831ve
+      type: object
+      additionalProperties: false
+      properties:
+        userName:
+          type: string
+          x-stoplight:
+            id: q6cozpqooxvbs
+        password:
+          type: string
+          x-stoplight:
+            id: 3q2ymy6zn8rv9
+        email:
+          type: string
+          x-stoplight:
+            id: 7rxdyjogdp01s
+    UserDTO:
+      title: UserDTO
+      x-stoplight:
+        id: mlsavke3omx4u
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          x-stoplight:
+            id: n67sjqckij1mf
+        userName:
+          type: string
+          x-stoplight:
+            id: 6a1nioffklcn5
+    Comment:
+      title: Comment
+      x-stoplight:
+        id: 9jefbu3mt3t79
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+        userId:
+          type: string
+          x-stoplight:
+            id: 8mztsi8a87cyy
+        comment:
+          type: string
+          x-stoplight:
+            id: a6wis3qxiuy0z
+        date:
+          type: string
+          x-stoplight:
+            id: pixpsrq41s7mf
+          format: date-time
+        user:
+          $ref: '#/components/schemas/UserDTO'
+          x-stoplight:
+            id: 8cme2eqspdi56
+    PostResponse:
+      title: PostResponse
+      x-stoplight:
+        id: 0gmt5hb4i7vax
+      type: object
+      additionalProperties: false
+      properties:
+        user:
+          $ref: '#/components/schemas/UserDTO'
+          x-stoplight:
+            id: vhtrfe2t0e763
+        post:
+          $ref: '#/components/schemas/Post'
+          x-stoplight:
+            id: loiwx2xb0ekdr
+    CreateEntityResponse:
+      title: CreateEntityResponse
+      x-stoplight:
+        id: fx1e41cm3ab85
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: boolean
+          x-stoplight:
+            id: a5fee45plucas
+        message:
+          type: string
+          x-stoplight:
+            id: 3fr24zpymxixx
