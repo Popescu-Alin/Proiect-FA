@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { LoginResponse } from '../../models/models';
 import { DataReciverService } from '../../services/data-reciver.service';
 import { Router } from '@angular/router';
 import { CustomAlertService } from '../../services/custom-alert.service';
+import { TokenResponse } from '../../client/client';
+import { error } from 'console';
 
 @Component({
   selector: 'app-login-page',
@@ -40,12 +41,16 @@ export class LoginPageComponent implements OnInit {
   loginSubmit(){
     this.isLoading = true;
     this.subscriptions.push( this.authService.login(this.loginForm.value).subscribe({
-      next: (user: LoginResponse | undefined) => {
-        if(user != null && user != undefined){
+      next: (token: TokenResponse | undefined ) => {
+        if(token?.token !== undefined && token.token !== null){
           this.isLoading = false;
-          this.dataReciver.setUserData(user);
+          this.dataReciver.setToken(token.token!);
           this.customAlertSevcice.successSnackBar("Login successful!");
           this.router.navigate(['/home']);
+          this.dataReciver.setIsLogedIn(true);
+        }else{
+          this.isLoading = false;
+          this.customAlertSevcice.errorSnackBar("Email or password is incorrect!");
         }
       },
       error: (err) => {

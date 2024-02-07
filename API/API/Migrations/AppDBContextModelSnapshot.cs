@@ -59,6 +59,9 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -86,7 +89,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserDTOs");
+                    b.ToTable("UserDTO");
                 });
 
             modelBuilder.Entity("API.models.Role", b =>

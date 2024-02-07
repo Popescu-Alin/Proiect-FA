@@ -53,7 +53,7 @@ builder.Services.AddAuthentication(auth =>
 builder.Services.AddScoped<IService<User>, UserService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppDBContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 builder.Services.AddTransient<IService<User>, UserService>();
 builder.Services.AddTransient<IService<Post>, PostService>();
 builder.Services.AddTransient<IService<Comment>, CommentService>();

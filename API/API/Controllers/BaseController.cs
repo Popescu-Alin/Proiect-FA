@@ -31,7 +31,6 @@ namespace API.Controllers
         [Authorize]
         public async override Task<PostResponse> AddPost([FromBody] Post body)
         {
-            
             body.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             User user = await _userManager.FindByIdAsync(body.UserId);
             Post post = await _postService.Add(body);
@@ -53,7 +52,7 @@ namespace API.Controllers
             IEnumerable<Post> postList =  await _postService.GetAll(null);
             return await Task.WhenAll(postList.Select(async (post) =>
             {
-                User user = await _userManager.FindByIdAsync(post.UserId);
+                User user = await _userService.GetByConition(user =>user.Id.ToString().Equals(post.UserId));
                 return new PostResponse()
                 {
                     Post = post,
@@ -78,15 +77,27 @@ namespace API.Controllers
             };
         }
 
-        public async override Task<IActionResult> Register([FromBody] RegistrationDTO body)
+        public async override Task<CreateEntityResponse> RegisterUser([FromBody] RegistrationDTO body)
         {
             var userNameExists = await _userManager.FindByNameAsync(body.UserName);
             if (userNameExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User already exists!" });
-
+            {
+                return new CreateEntityResponse()
+                {
+                    Message = "User name already exists!",
+                    Result = false
+                };
+            }
+                
             var EmailExists = await _userManager.FindByEmailAsync(body.Email);
             if (EmailExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User already exists!" });
+            {
+                return new CreateEntityResponse()
+                {
+                    Message = "Email already used!",
+                    Result = false
+                };
+            }
 
             User user = new User();
             user.Email = body.Email;
@@ -99,9 +110,19 @@ namespace API.Controllers
             }
 
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            {
+                return new CreateEntityResponse()
+                {
+                    Message = "User creation failed!",
+                    Result = false
+                };
+            }
 
-            return Ok(new { Status = "Success", Message = "User created successfully!" });
+            return new CreateEntityResponse
+            {
+                Message = "Ok!",
+                Result = true
+            };
         }
 
         public async override Task<TokenResponse> Login([FromBody] UserLoginDTO body)
@@ -118,5 +139,18 @@ namespace API.Controllers
             return new TokenResponse();
         }
 
+        [Authorize]
+        public async override Task<UserDTO> Profile()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            User user = await _userManager.FindByIdAsync(userId);
+            return new UserDTO
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                Id = user.Id.ToString()
+            };
+
+        }
     }
 }

@@ -52,28 +52,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserLoginDTO'
-  /register:
-    post:
-      summary: ''
-      operationId: register
-      responses:
-        '201':
-          description: Created
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegistrationDTO'
   '/users/get/{id}':
     get:
       summary: Your GET endpoint
@@ -98,8 +76,8 @@ paths:
       summary: ''
       operationId: add-post
       responses:
-        '201':
-          description: Created
+        '200':
+          description: OK
           content:
             application/json:
               schema:
@@ -119,6 +97,48 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Post'
+  /register:
+    post:
+      summary: ''
+      operationId: register-user
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEntityResponse'
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationDTO'
+  /users/profile:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+      operationId: profile
 components:
   schemas:
     Post:
@@ -151,6 +171,11 @@ components:
           type: string
           x-stoplight:
             id: 3ygrhx9z2valt
+        date:
+          type: string
+          x-stoplight:
+            id: omvvzfnztyp9j
+          format: date-time
     UserLoginDTO:
       title: UserLoginDTO
       x-stoplight:
@@ -257,3 +282,18 @@ components:
           $ref: '#/components/schemas/Post'
           x-stoplight:
             id: loiwx2xb0ekdr
+    CreateEntityResponse:
+      title: CreateEntityResponse
+      x-stoplight:
+        id: fx1e41cm3ab85
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: boolean
+          x-stoplight:
+            id: a5fee45plucas
+        message:
+          type: string
+          x-stoplight:
+            id: 3fr24zpymxixx
